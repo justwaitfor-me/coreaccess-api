@@ -14,7 +14,9 @@ This document provides an overview of the file structure for the PHP Authenticat
 
 ### `docs/`
 
-- `routes.md`: Documentation for the API routes.
+- `.gitkeep`: Keeps the directory tracked in Git.
+- `FILE_STRUCTURE.md`: Documentation for the project file structure.
+- `ROUTE_STRUCTURE.md`: Documentation for the API routes.
 
 ### `public/`
 

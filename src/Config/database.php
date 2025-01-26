@@ -9,9 +9,9 @@ $database = $_ENV['DB_NAME'];
 
 if ($_SERVER['SERVER_NAME'] == 'localhost') {
     $host = 'localhost';
-    $username = 'admin';
+    $username = 'root';
     $password = '';
-    $database = 'local_database_name';
+    $database = 'db114307';
 }
 
 // Database configuration settings

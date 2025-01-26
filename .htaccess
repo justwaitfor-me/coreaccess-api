@@ -1,0 +1,4 @@
+RewriteEngine On
+
+RewriteCond %{HTTP_HOST} !^(localhost|api\.coreaccess\.justwaitforme\.de)$ [NC]
+RewriteRule ^ - [F]

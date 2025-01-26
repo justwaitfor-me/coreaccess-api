@@ -1,10 +1,18 @@
 <?php
-require_once '../vendor/autoload.php';
-
 use Slim\Factory\AppFactory;
-use App\Controllers\AuthController;
+
+require_once __DIR__ . '/../vendor/autoload.php';
 
 $app = AppFactory::create();
+
+// Add Routing Middleware
+$app->addRoutingMiddleware();
+
+// Add Error Handling Middleware
+$app->addErrorMiddleware(true, false, false);
+
+// Ensure all output is JSON
+header('Content-Type: application/json');
 
 // Check if the current URI has /v1 or any other version
 $uri = $_SERVER['REQUEST_URI'];

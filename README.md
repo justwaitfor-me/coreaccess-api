@@ -5,40 +5,32 @@ This is a scalable PHP authentication application that provides a RESTful API fo
 ## Project Structure
 
 ```
-php-auth-app
-├── public
-│   ├── index.php          # Entry point of the API
-│   └── .htaccess          # URL rewriting for clean URLs
+```
+coreaccess/api
 ├── src
-│   ├── Controllers         # Contains controllers for handling requests
-│   │   └── AuthController.php
-│   ├── Models              # Database models
-│   │   ├── User.php
-│   │   └── Role.php
-│   ├── Routes              # API version routes
-│   │   ├── v1.php
-│   │   └── v2.php
-│   ├── Services            # Business logic services
-│   │   └── AuthService.php
-│   ├── Middlewares         # Request middlewares
-│   │   └── AuthMiddleware.php
-│   ├── Helpers             # Utility functions
-│   │   └── ResponseHelper.php
-│   ├── Config              # Configuration files
+│   ├── Config
 │   │   ├── database.php
 │   │   └── jwt.php
-│   └── Database            # Migrations and seeders
-│       ├── migrations
-│       └── seeders
-├── storage                 # Logs and cache
-│   ├── logs
-│   └── cache
-├── tests                   # Unit and integration tests
-│   ├── unit
-│   └── integration
-├── README.md               # Project documentation
-├── composer.json           # Composer dependencies
-└── .gitignore              # Files to ignore in version control
+│   ├── Controllers
+│   │   ├── AuthController.php
+│   │   └── BaseController.php
+│   ├── Middleware
+│   │   └── AuthMiddleware.php
+│   ├── Models
+│   │   └── User.php
+│   └── Routes
+│       └── api.php
+├── tests
+│   ├── integration
+│   │   └── AuthTest.php
+│   └── unit
+│       └── UserTest.php
+├── vendor
+├── .env
+├── composer.json
+├── composer.lock
+└── README.md
+```
 ```
 
 ## Installation
@@ -46,7 +38,7 @@ php-auth-app
 1. Clone the repository:
 
    ```
-   git clone https://github.com/justwaitfor-me/coreaccess.git
+   git clone https://github.com/justwaitfor-me/coreaccess-api.git
    coreaccess
    ```
 
