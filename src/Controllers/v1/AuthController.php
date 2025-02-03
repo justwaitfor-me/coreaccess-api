@@ -26,8 +26,9 @@ class AuthController
     {
         $data = [
             "#" => $this->information,
-            "message" => "",
-            "body" => Null
+            "message" => "developing",
+            "body" => 
+        $request->getParsedBody()
         ];
 
         return $data;

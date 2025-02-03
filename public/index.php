@@ -1,15 +1,16 @@
 <?php
+
 use Slim\Factory\AppFactory;
+use App\Middleware\RequestLogger;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $app = AppFactory::create();
 
-// Add Routing Middleware
-$app->addRoutingMiddleware();
+$uniqueId = bin2hex(random_bytes(16));
 
-// Add Error Handling Middleware
-$app->addErrorMiddleware(true, false, false);
+// Register middleware
+$app->add(new RequestLogger($uniqueId));
 
 // Ensure all output is JSON
 header('Content-Type: application/json');
@@ -30,5 +31,42 @@ if (preg_match('/\/v(\d+)/', $uri, $matches)) {
     // Default to version 1 if no version is specified
     require_once __DIR__ . '/../src/Routes/v1.php';
 }
+
+// Add Routing Middleware
+$app->addRoutingMiddleware();
+
+// Add the body parsing middleware
+$app->addBodyParsingMiddleware();
+
+// Add Error Handling Middleware
+$errorMiddleware = $app->addErrorMiddleware(false, false, false);
+$errorMiddleware->setDefaultErrorHandler(function ($request, $exception, $displayErrorDetails, $logErrors, $logErrorDetails) use ($app) {
+    $response = $app->getResponseFactory()->createResponse();
+    $result = ['message' => 'Route not found', 'code' => 404, 'requestBody' => $request->getParsedBody()];
+    $response->getBody()->write(json_encode($result));
+    return $response->withHeader('Content-Type', 'application/json')->withStatus(404);
+});
+
+// Middleware to handle CORS
+$app->add(function ($request, $handler) use ($uniqueId) {
+    $response = $handler->handle($request);
+    return $response
+        ->withHeader('X-Request-UUID', $uniqueId)
+
+        ->withHeader('Access-Control-Allow-Origin', '*')
+        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS')
+        ->withHeader('Access-Control-Allow-Credentials', 'true')
+        ->withHeader('Access-Control-Expose-Headers', 'Authorization, Content-Length')
+        ->withHeader('Access-Control-Max-Age', '3600');
+});
+
+// Test
+$app->any($routeBaseBefore . $routePrefix . '/test', function ($request, $response) {
+    $parsedBody = $request->getParsedBody();
+    $result = ['body' => $parsedBody, 'message' => 'This is a test route.', 'code' => 200];
+    $response->getBody()->write(json_encode($result));
+    return $response->withHeader('Content-Type', 'application/json');
+});
 
 $app->run();

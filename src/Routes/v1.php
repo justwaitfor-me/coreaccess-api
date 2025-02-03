@@ -6,24 +6,12 @@ use App\Controllers\v1\AdminController;
 use App\Controllers\v1\SessionController;
 use App\Controllers\v1\SecurityController;
 use App\Controllers\v1\SystemController;
-use App\Middleware\RequestLogger;
 
 $version = 1;
 $routePrefix = "v{$version}";
 $routeBase = $_SERVER['REQUEST_URI'];
 $routeBaseBefore = strtok($routeBase, $routePrefix);
 $routeBaseAfter = substr($routeBase, strlen($routeBaseBefore));
-
-// Register middleware
-$app->add(new RequestLogger());
-
-// Test
-$app->get($routeBaseBefore . $routePrefix . '/test', function ($request, $response) {
-    $result = ['message' => 'This is a test route.'];
-    $response->getBody()->rewind();
-    $response->getBody()->write(json_encode($result));
-    return $response->withHeader('Content-Type', 'application/json');
-});
 
 // Authentication
 $app->post($routeBaseBefore . $routePrefix . '/auth/signup', function ($request, $response, $args) {
@@ -205,3 +193,4 @@ $app->get($routeBaseBefore . $routePrefix . '/admin/logs', function ($request, $
     $response->getBody()->write(json_encode((array)$result));
     return $response->withHeader('Content-Type', 'application/json');
 });
+

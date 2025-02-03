@@ -8,15 +8,25 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 
 class RequestLogger
 {
+    protected $uniqueId;
+
+    public function __construct($uniqueId)
+    {
+        $this->uniqueId = $uniqueId;
+    }
+
     public function __invoke(Request $request, RequestHandler $handler)
     {
-        $uniqueId = bin2hex(random_bytes(16));
+        $body = (string)$request->getBody();
+        $request->getBody()->rewind(); // Rewind the body stream after reading
+
         $logData = [
-            'id' => $uniqueId,
+            'id' => $this->uniqueId,
             'method' => $request->getMethod(),
             'uri' => (string)$request->getUri(),
             'headers' => $request->getHeaders(),
-            'body' => (string)$request->getBody()
+            'body' => $body,
+            'ip' => $_SERVER['REMOTE_ADDR'],
         ];
 
         $logFile = __DIR__ . '/../../storage/logs/requests.log';

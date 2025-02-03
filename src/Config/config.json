@@ -1,4 +1,6 @@
 {
+    "name": "Coreaccess",
     "author": "JustWait",
-    "description": "Session management API"
+    "description": "Session management API",
+    "licence": "MIT"
 }
